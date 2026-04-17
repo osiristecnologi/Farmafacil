@@ -2,116 +2,78 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0a6847">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="FarmaFácil - Orçamentos para WhatsApp">
 <title>FarmaFácil</title>
 
 <style>
-body{font-family:Arial;background:#f2f2f2;margin:0}
-.container{padding:20px}
-input,button,select{padding:10px;margin:5px 0;width:100%}
-.btn{background:#0a6847;color:#fff;border:none}
-.card{background:#fff;padding:10px;margin:10px 0;border-radius:8px}
+body{font-family:Arial;background:#f0f0f0;margin:0;padding:20px}
+.container{max-width:500px;margin:auto;background:#fff;padding:20px;border-radius:10px}
+input,button{width:100%;padding:10px;margin-top:10px}
+button{background:#0a6847;color:#fff;border:none;border-radius:5px}
 </style>
 </head>
 
 <body>
 
 <div class="container">
+<h2>FarmaFácil (Simplificado)</h2>
 
-<h2>FarmaFácil</h2>
+<input id="cliente" placeholder="Nome do cliente">
+<input id="telefone" placeholder="Telefone">
 
-<h3>Adicionar Produto</h3>
-<input id="nome" placeholder="Nome do produto">
+<input id="produto" placeholder="Produto">
 <input id="preco" placeholder="Preço">
-<button class="btn" onclick="addProduto()">Salvar</button>
+<input id="qtd" placeholder="Quantidade" value="1">
 
-<h3>Produtos</h3>
-<div id="lista"></div>
+<button onclick="add()">Adicionar</button>
 
-<h3>Orçamento</h3>
-<select id="selectProd"></select>
-<input id="qtd" type="number" value="1">
-<button class="btn" onclick="addItem()">Adicionar</button>
+<pre id="lista"></pre>
 
-<div id="orcamento"></div>
-
-<h3>Total: <span id="total">0</span></h3>
-
-<button class="btn" onclick="enviar()">Enviar WhatsApp</button>
-
+<button onclick="gerar()">Gerar WhatsApp</button>
 </div>
 
 <script>
+let itens=[];
 
-let produtos = JSON.parse(localStorage.getItem('produtos')||'[]')
-let itens = []
+function add(){
+  const nome=document.getElementById('produto').value;
+  const preco=parseFloat(document.getElementById('preco').value)||0;
+  const qtd=parseInt(document.getElementById('qtd').value)||1;
 
-function salvar(){
- localStorage.setItem('produtos',JSON.stringify(produtos))
-}
-
-function addProduto(){
- let nome=document.getElementById('nome').value
- let preco=parseFloat(document.getElementById('preco').value)
-
- if(!nome||!preco)return alert("Preenche certo")
-
- produtos.push({id:Date.now(),nome,preco})
- salvar()
- render()
+  itens.push({nome,preco,qtd});
+  render();
 }
 
 function render(){
- let lista=document.getElementById('lista')
- let select=document.getElementById('selectProd')
-
- lista.innerHTML=""
- select.innerHTML=""
-
- produtos.forEach(p=>{
-   lista.innerHTML+=`<div class="card">${p.nome} - R$ ${p.preco}</div>`
-   select.innerHTML+=`<option value="${p.id}">${p.nome}</option>`
- })
+  let txt='';
+  itens.forEach(i=>{
+    txt+=i.nome+' - '+i.qtd+'x R$'+i.preco+'\\n';
+  });
+  document.getElementById('lista').textContent=txt;
 }
 
-function addItem(){
- let id=document.getElementById('selectProd').value
- let qtd=parseInt(document.getElementById('qtd').value)
+function gerar(){
+  const cliente=document.getElementById('cliente').value;
+  const tel=document.getElementById('telefone').value.replace(/\\D/g,'');
 
- let p=produtos.find(x=>x.id==id)
+  let msg='📋 ORÇAMENTO\\n\\nCliente: '+cliente+'\\n\\n';
 
- itens.push({...p,qtd})
+  let total=0;
+  itens.forEach(i=>{
+    const sub=i.preco*i.qtd;
+    total+=sub;
+    msg+=`${i.nome} - ${i.qtd}x R$${i.preco} = R$${sub}\\n`;
+  });
 
- renderOrc()
+  msg+='\\nTotal: R$'+total;
+
+  const url='https://wa.me/55'+tel+'?text='+encodeURIComponent(msg);
+  window.open(url);
 }
-
-function renderOrc(){
- let div=document.getElementById('orcamento')
- let total=0
- div.innerHTML=""
-
- itens.forEach(i=>{
-   let sub=i.preco*i.qtd
-   total+=sub
-   div.innerHTML+=`<div class="card">${i.nome} x${i.qtd} = R$ ${sub}</div>`
- })
-
- document.getElementById('total').innerText=total
-}
-
-function enviar(){
- let msg="Orçamento:\n"
-
- itens.forEach(i=>{
-   msg+=`${i.nome} x${i.qtd}\n`
- })
-
- let url="https://wa.me/?text="+encodeURIComponent(msg)
- window.open(url)
-}
-
-render()
-
 </script>
 
 </body>
