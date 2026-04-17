@@ -1,79 +1,130 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#0a6847">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="description" content="FarmaFácil - Orçamentos para WhatsApp">
-<title>FarmaFácil</title>
-
-<style>
-body{font-family:Arial;background:#f0f0f0;margin:0;padding:20px}
-.container{max-width:500px;margin:auto;background:#fff;padding:20px;border-radius:10px}
-input,button{width:100%;padding:10px;margin-top:10px}
-button{background:#0a6847;color:#fff;border:none;border-radius:5px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="theme-color" content="#006400">
+    <title>FarmaFácil</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #006400, #008000);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            width: 130px;
+            height: 130px;
+            background: white;
+            border-radius: 30px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .logo::before {
+            content: "💊";
+            font-size: 70px;
+        }
+        h1 {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 60px;
+            opacity: 0.95;
+        }
+        .card {
+            background: white;
+            color: #333;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.03);
+        }
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        .card-content h3 {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        .card-content p {
+            color: #666;
+            font-size: 15px;
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
-<h2>FarmaFácil (Simplificado)</h2>
+    <!-- Logo da pílula -->
+    <div class="logo"></div>
+    
+    <h1>FarmaFácil</h1>
+    <p class="subtitle">Orçamentos para WhatsApp</p>
 
-<input id="cliente" placeholder="Nome do cliente">
-<input id="telefone" placeholder="Telefone">
+    <!-- Card Novo Orçamento -->
+    <div class="card" onclick="novoOrcamento()">
+        <div class="card-icon">📋</div>
+        <div class="card-content">
+            <h3>Novo Orçamento</h3>
+            <p>Monte e envie pelo WhatsApp</p>
+        </div>
+    </div>
 
-<input id="produto" placeholder="Produto">
-<input id="preco" placeholder="Preço">
-<input id="qtd" placeholder="Quantidade" value="1">
-
-<button onclick="add()">Adicionar</button>
-
-<pre id="lista"></pre>
-
-<button onclick="gerar()">Gerar WhatsApp</button>
+    <!-- Card Produtos -->
+    <div class="card" onclick="gerenciarProdutos()">
+        <div class="card-icon">💊</div>
+        <div class="card-content">
+            <h3>Produtos</h3>
+            <p id="status-produtos">Nenhum cadastrado</p>
+        </div>
+    </div>
 </div>
 
 <script>
-let itens=[];
+    function novoOrcamento() {
+        alert("Em breve: Tela de Novo Orçamento (pode ser a versão simplificada que você tinha antes)");
+        // Aqui você pode redirecionar para outra página ou mostrar o formulário antigo
+        // window.location.href = "orcamento.html";  // se quiser separar
+    }
 
-function add(){
-  const nome=document.getElementById('produto').value;
-  const preco=parseFloat(document.getElementById('preco').value)||0;
-  const qtd=parseInt(document.getElementById('qtd').value)||1;
+    function gerenciarProdutos() {
+        alert("Em breve: Gerenciamento de Produtos");
+        // Aqui pode abrir a lista de produtos cadastrados
+    }
 
-  itens.push({nome,preco,qtd});
-  render();
-}
-
-function render(){
-  let txt='';
-  itens.forEach(i=>{
-    txt+=i.nome+' - '+i.qtd+'x R$'+i.preco+'\\n';
-  });
-  document.getElementById('lista').textContent=txt;
-}
-
-function gerar(){
-  const cliente=document.getElementById('cliente').value;
-  const tel=document.getElementById('telefone').value.replace(/\\D/g,'');
-
-  let msg='📋 ORÇAMENTO\\n\\nCliente: '+cliente+'\\n\\n';
-
-  let total=0;
-  itens.forEach(i=>{
-    const sub=i.preco*i.qtd;
-    total+=sub;
-    msg+=`${i.nome} - ${i.qtd}x R$${i.preco} = R$${sub}\\n`;
-  });
-
-  msg+='\\nTotal: R$'+total;
-
-  const url='https://wa.me/55'+tel+'?text='+encodeURIComponent(msg);
-  window.open(url);
-}
+    // Exemplo simples: mudar o texto quando tiver produtos (futuro)
+    // document.getElementById('status-produtos').textContent = "3 cadastrados";
 </script>
 
 </body>
