@@ -1,53 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GW Wireless</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <!-- HEADER -->
-    <header class="header">
-      <img src="logo.png" class="logo" />
-      <h1>GW Wireless</h1>
-    </header>
+  <!-- HEADER -->
+  <header class="header">
+    <img src="logo.png" class="logo">
+    <span class="title">GW Wireless</span>
+  </header>
 
-    <!-- CONTEÚDO -->
-    <main class="content">
-      
-      <div class="card">
-        <h2>Produtos</h2>
+  <!-- TELAS -->
+  <main id="screen">
+
+    <!-- HOME -->
+    <section id="home" class="page active">
+      <h2>Bem-vindo</h2>
+      <div class="card" onclick="go('products')">
+        <h3>🛒 Produtos</h3>
         <p>Veja os produtos disponíveis</p>
-        <button onclick="alert('Abrir produtos')">Entrar</button>
       </div>
 
-      <div class="card">
-        <h2>Feed</h2>
-        <p>Publicações dos usuários</p>
-        <button onclick="alert('Abrir feed')">Ver Feed</button>
-      </div>
-
-      <div class="card">
-        <h2>Perfil</h2>
+      <div class="card" onclick="go('profile')">
+        <h3>👤 Perfil</h3>
         <p>Gerencie sua conta</p>
-        <button onclick="alert('Abrir perfil')">Acessar</button>
       </div>
+    </section>
 
-    </main>
+    <!-- PRODUTOS -->
+    <section id="products" class="page">
+      <h2>Produtos</h2>
+      <div class="grid" id="productList"></div>
+    </section>
 
-    <!-- MENU -->
-    <nav class="bottom-nav">
-      <button>🏠</button>
-      <button>🛒</button>
-      <button>👤</button>
-    </nav>
+    <!-- PERFIL -->
+    <section id="profile" class="page">
+      <h2>Perfil</h2>
+      <p>Área do usuário</p>
+    </section>
 
-  </div>
+  </main>
 
-  <script src="script.js"></script>
+  <!-- NAV -->
+  <nav class="nav">
+    <button onclick="go('home')">🏠</button>
+    <button onclick="go('products')">🛒</button>
+    <button onclick="go('profile')">👤</button>
+  </nav>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
