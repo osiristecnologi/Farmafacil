@@ -3,36 +3,11 @@ function go(page) {
     p.classList.remove("active");
   });
 
-  document.getElementById(page).classList.add("active");
+  const el = document.getElementById(page);
+  el.classList.add("active");
+
+  el.style.animation = "none";
+  setTimeout(() => {
+    el.style.animation = "slideUp 0.4s ease";
+  }, 10);
 }
-
-// PRODUTOS FAKE (teste)
-const products = [
-  {
-    name: "Fone Bluetooth",
-    price: "R$ 99",
-    img: "https://via.placeholder.com/150"
-  },
-  {
-    name: "Carregador",
-    price: "R$ 49",
-    img: "https://via.placeholder.com/150"
-  },
-  {
-    name: "Capa Celular",
-    price: "R$ 29",
-    img: "https://via.placeholder.com/150"
-  }
-];
-
-const list = document.getElementById("productList");
-
-products.forEach(p => {
-  list.innerHTML += `
-    <div class="product">
-      <img src="${p.img}">
-      <h4>${p.name}</h4>
-      <span>${p.price}</span>
-    </div>
-  `;
-});
